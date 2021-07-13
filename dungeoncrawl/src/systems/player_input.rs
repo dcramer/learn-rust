@@ -47,7 +47,6 @@ pub fn player_input(
             }
             _ => Point::new(0, 0),
         };
-        let mut did_something = false;
         let (player_entity, destination) = players
             .iter(ecs)
             .find_map(|(entity, pos)| Some((*entity, *pos + delta)))
@@ -60,7 +59,6 @@ pub fn player_input(
                 .filter(|(_, pos)| **pos == destination)
                 .for_each(|(entity, _)| {
                     hit_something = true;
-                    did_something = true;
                     commands.push((
                         (),
                         WantsToAttack {
@@ -70,7 +68,6 @@ pub fn player_input(
                     ));
                 });
             if !hit_something {
-                did_something = true;
                 commands.push((
                     (),
                     WantsToMove {
