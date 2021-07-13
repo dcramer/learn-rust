@@ -161,10 +161,12 @@ fn populate_map(ecs: &mut World, resources: &mut Resources) {
         map_builder.map.tiles[exit_idx] = TileType::StairsDown;
     }
 
-    map_builder
-        .monster_spawns
-        .iter()
-        .for_each(|pos| spawn_entity(ecs, &mut rng, *pos));
+    spawn_level(
+        ecs,
+        &mut rng,
+        map_level as usize,
+        &map_builder.monster_spawns,
+    );
     resources.insert(map_builder.map);
     resources.insert(Camera::new(map_builder.player_start));
     resources.insert(TurnState::AwaitingInput);
