@@ -15,6 +15,7 @@ pub struct Template {
     pub provides: Option<Vec<(String, i32)>>,
     pub hp: Option<i32>,
     pub base_damage: Option<i32>,
+    pub score_value: Option<u32>,
 }
 
 #[derive(Clone, Deserialize, Debug, PartialEq)]
@@ -96,6 +97,10 @@ impl Templates {
             if template.entity_type == EntityType::Item {
                 commands.add_component(entity, Weapon {});
             }
+        }
+
+        if let Some(score_value) = &template.score_value {
+            commands.add_component(entity, ScoreValue(*score_value));
         }
 
         if let Some(effects) = &template.provides {

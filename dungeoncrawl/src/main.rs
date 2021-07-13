@@ -51,6 +51,12 @@ impl State {
     }
 
     fn game_over(&mut self, ctx: &mut BTerm) {
+        let score = <&Player>::query()
+            .iter(&self.ecs)
+            .map(|player| player.score)
+            .nth(0)
+            .unwrap();
+
         ctx.set_active_console(2);
         ctx.print_color_centered(2, RED, BLACK, "Your quest has ended.");
         ctx.print_color_centered(
@@ -71,7 +77,9 @@ impl State {
             BLACK,
             "Don't worry, you can always try again with a new hero.",
         );
-        ctx.print_color_centered(9, GREEN, BLACK, "Press 1 to play again.");
+
+        ctx.print_color_centered(10, GREEN, BLACK, format!("Total Score: {}", score));
+        ctx.print_color_centered(11, GREEN, BLACK, "Press 1 to play again.");
 
         if let Some(VirtualKeyCode::Key1) = ctx.key {
             self.reset_game_state();
@@ -79,6 +87,12 @@ impl State {
     }
 
     fn victory(&mut self, ctx: &mut BTerm) {
+        let score = <&Player>::query()
+            .iter(&self.ecs)
+            .map(|player| player.score)
+            .nth(0)
+            .unwrap();
+
         ctx.set_active_console(2);
         ctx.print_color_centered(2, GREEN, BLACK, "You have won!");
         ctx.print_color_centered(
@@ -93,7 +107,8 @@ impl State {
             BLACK,
             "Your town is saved and y ou can return to your normal life.",
         );
-        ctx.print_color_centered(7, GREEN, BLACK, "Press 1 to play again.");
+        ctx.print_color_centered(7, GREEN, BLACK, format!("Total Score: {}", score));
+        ctx.print_color_centered(8, GREEN, BLACK, "Press 1 to play again.");
 
         if let Some(VirtualKeyCode::Key1) = ctx.key {
             self.reset_game_state();
